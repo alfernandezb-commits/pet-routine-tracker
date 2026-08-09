@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Routine Tracker</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <h1>Pet Routine Tracker</h1>
+        <p>Track feeding, meds, and routines in real time.</p>
+      </header>
+
+      <nav class="view-toggle" aria-label="Primary">
+        <button id="show-dashboard" class="active" type="button">Dashboard</button>
+        <button id="show-manage" type="button">Manage Tasks</button>
+      </nav>
+
+      <section id="dashboard-view" class="view" aria-labelledby="show-dashboard">
+        <h2>Today</h2>
+        <ul id="dashboard-task-list" class="task-list" aria-live="polite"></ul>
+        <p id="dashboard-empty" class="empty-state">No tasks yet. Add one in Manage Tasks.</p>
+      </section>
+
+      <section id="manage-view" class="view hidden" aria-labelledby="show-manage">
+        <h2>Manage Tasks</h2>
+
+        <form id="task-form" class="task-form">
+          <input id="task-id" type="hidden" />
+
+          <label for="task-name">Task name</label>
+          <input id="task-name" name="taskName" type="text" maxlength="60" required />
+
+          <label for="task-time">Scheduled time</label>
+          <input id="task-time" name="taskTime" type="time" required />
+
+          <div class="form-actions">
+            <button id="save-task" type="submit">Save Task</button>
+            <button id="cancel-edit" type="button" class="secondary hidden">Cancel Edit</button>
+          </div>
+        </form>
+
+        <ul id="manage-task-list" class="task-list"></ul>
+        <p id="manage-empty" class="empty-state">No tasks available.</p>
+      </section>
+
+      <p id="status-message" class="status-message" aria-live="polite"></p>
+    </main>
+
+    <script>
+      // Set your Firebase project config here before running the app.
+      window.FIREBASE_CONFIG = window.FIREBASE_CONFIG || {
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        appId: "",
+      };
+    </script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
