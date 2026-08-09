@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="darkreader-lock" />
     <title>Rutina del Perro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -107,6 +108,24 @@
 
           <label for="task-time">Horario</label>
           <input id="task-time" name="taskTime" type="time" required />
+
+          <label for="task-dose-amount">Dosis (opcional)</label>
+          <div class="dose-row">
+            <input
+              id="task-dose-amount"
+              name="doseAmount"
+              type="number"
+              min="0"
+              step="0.1"
+              placeholder="Cantidad"
+            />
+            <select id="task-dose-unit" name="doseUnit">
+              <option value="g">g</option>
+              <option value="ml">ml</option>
+              <option value="mg">mg</option>
+              <option value="tab">comprimidos</option>
+            </select>
+          </div>
 
           <fieldset class="type-fieldset">
             <legend>Ícono</legend>

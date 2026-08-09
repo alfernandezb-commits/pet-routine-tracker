@@ -31,6 +31,21 @@ function iconMarkup(type) {
   return TYPE_ICONS[type] || TYPE_ICONS[DEFAULT_TYPE];
 }
 
+const DOSE_UNIT_LABELS = { g: "g", ml: "ml", mg: "mg", tab: "comprimidos" };
+
+function formatDose(amount, unit) {
+  if (amount === null || amount === undefined || amount === "") return "";
+
+  const numericAmount = Number(amount);
+  if (Number.isNaN(numericAmount)) return "";
+
+  if (unit === "tab") {
+    return `${numericAmount} ${numericAmount === 1 ? "comprimido" : "comprimidos"}`;
+  }
+
+  return `${numericAmount} ${DOSE_UNIT_LABELS[unit] || unit}`;
+}
+
 // ---------- Elements ----------
 const themeToggle = document.getElementById("theme-toggle");
 const configBanner = document.getElementById("config-banner");
@@ -50,6 +65,8 @@ const taskForm = document.getElementById("task-form");
 const taskIdInput = document.getElementById("task-id");
 const taskNameInput = document.getElementById("task-name");
 const taskTimeInput = document.getElementById("task-time");
+const taskDoseAmountInput = document.getElementById("task-dose-amount");
+const taskDoseUnitInput = document.getElementById("task-dose-unit");
 const taskTypeInput = document.getElementById("task-type");
 const typeOptionButtons = Array.from(document.querySelectorAll(".type-option"));
 const cancelEditButton = document.getElementById("cancel-edit");
@@ -114,6 +131,8 @@ function setStatus(message) {
 function resetFormState() {
   taskForm.reset();
   taskIdInput.value = "";
+  taskDoseAmountInput.value = "";
+  taskDoseUnitInput.value = "g";
   setSelectedType(DEFAULT_TYPE);
   cancelEditButton.classList.add("hidden");
 }
@@ -199,7 +218,10 @@ function runApp(config) {
 
       const time = document.createElement("div");
       time.className = "task-time";
-      time.textContent = formatTime(task.scheduledTime);
+      const dose = formatDose(task.doseAmount, task.doseUnit);
+      time.textContent = dose
+        ? `${formatTime(task.scheduledTime)} · ${dose}`
+        : formatTime(task.scheduledTime);
 
       labelWrap.append(name, time);
       taskMain.append(iconBadge, labelWrap);
@@ -249,7 +271,10 @@ function runApp(config) {
 
       const time = document.createElement("div");
       time.className = "task-time";
-      time.textContent = formatTime(task.scheduledTime);
+      const dose = formatDose(task.doseAmount, task.doseUnit);
+      time.textContent = dose
+        ? `${formatTime(task.scheduledTime)} · ${dose}`
+        : formatTime(task.scheduledTime);
 
       text.append(name, time);
       info.append(iconBadge, text);
@@ -264,6 +289,8 @@ function runApp(config) {
         taskIdInput.value = task.id;
         taskNameInput.value = task.name;
         taskTimeInput.value = task.scheduledTime;
+        taskDoseAmountInput.value = task.doseAmount ?? "";
+        taskDoseUnitInput.value = task.doseUnit || "g";
         setSelectedType(task.type || DEFAULT_TYPE);
         cancelEditButton.classList.remove("hidden");
         showView("manage");
@@ -300,6 +327,9 @@ function runApp(config) {
     const name = taskNameInput.value.trim();
     const scheduledTime = taskTimeInput.value;
     const type = taskTypeInput.value || DEFAULT_TYPE;
+    const rawDoseAmount = taskDoseAmountInput.value.trim();
+    const doseAmount = rawDoseAmount === "" ? null : Number(rawDoseAmount);
+    const doseUnit = rawDoseAmount === "" ? null : taskDoseUnitInput.value;
     const existingTaskId = taskIdInput.value;
 
     if (!name || !scheduledTime) {
@@ -311,6 +341,8 @@ function runApp(config) {
       name,
       scheduledTime,
       type,
+      doseAmount,
+      doseUnit,
       updatedAt: serverTimestamp(),
     };
 
@@ -417,4 +449,3 @@ function runApp(config) {
   ensureDailyReset();
   startRealtimeSync();
 }
-
