@@ -1,56 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pet Routine Tracker</title>
+    <title>Rutina del Perro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="app-shell">
       <header class="app-header">
-        <h1>Pet Routine Tracker</h1>
-        <p>Track feeding, meds, and routines in real time.</p>
+        <div class="app-header-top">
+          <div>
+            <h1>Rutina del Perro</h1>
+            <p>Remedios y comida, organizados por horario.</p>
+          </div>
+          <button
+            id="theme-toggle"
+            class="icon-button"
+            type="button"
+            aria-label="Cambiar a modo oscuro"
+          >
+            <svg
+              class="icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4.2" />
+              <line x1="12" y1="2.5" x2="12" y2="5" />
+              <line x1="12" y1="19" x2="12" y2="21.5" />
+              <line x1="4.2" y1="4.2" x2="6" y2="6" />
+              <line x1="18" y1="18" x2="19.8" y2="19.8" />
+              <line x1="2.5" y1="12" x2="5" y2="12" />
+              <line x1="19" y1="12" x2="21.5" y2="12" />
+              <line x1="4.2" y1="19.8" x2="6" y2="18" />
+              <line x1="18" y1="6" x2="19.8" y2="4.2" />
+            </svg>
+            <svg
+              class="icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z" />
+            </svg>
+          </button>
+        </div>
       </header>
 
-      <nav class="view-toggle" aria-label="Primary">
-        <button id="show-dashboard" class="active" type="button">Dashboard</button>
-        <button id="show-manage" type="button">Manage Tasks</button>
+      <p id="config-banner" class="config-banner hidden">
+        Falta conectar la base de datos: agregá tu configuración de Firebase en
+        <code>index.html</code> para que se guarden y sincronicen los remedios
+        entre todos.
+      </p>
+
+      <nav class="view-toggle" aria-label="Principal">
+        <button id="show-dashboard" class="active" type="button">Hoy</button>
+        <button id="show-manage" type="button">Administrar</button>
       </nav>
 
-      <section id="dashboard-view" class="view" aria-labelledby="show-dashboard">
-        <h2>Today</h2>
+      <section
+        id="dashboard-view"
+        class="view"
+        aria-labelledby="show-dashboard"
+      >
+        <h2>Hoy</h2>
         <ul id="dashboard-task-list" class="task-list" aria-live="polite"></ul>
-        <p id="dashboard-empty" class="empty-state">No tasks yet. Add one in Manage Tasks.</p>
+        <p id="dashboard-empty" class="empty-state">
+          Todavía no hay nada cargado. Agregá algo en "Administrar".
+        </p>
       </section>
 
-      <section id="manage-view" class="view hidden" aria-labelledby="show-manage">
-        <h2>Manage Tasks</h2>
+      <section
+        id="manage-view"
+        class="view hidden"
+        aria-labelledby="show-manage"
+      >
+        <h2>Administrar</h2>
 
         <form id="task-form" class="task-form">
           <input id="task-id" type="hidden" />
 
-          <label for="task-name">Task name</label>
-          <input id="task-name" name="taskName" type="text" maxlength="60" required />
+          <label for="task-name">Nombre</label>
+          <input
+            id="task-name"
+            name="taskName"
+            type="text"
+            maxlength="60"
+            placeholder="Ej: Antibiótico, Desayuno..."
+            required
+          />
 
-          <label for="task-time">Scheduled time</label>
+          <label for="task-time">Horario</label>
           <input id="task-time" name="taskTime" type="time" required />
 
+          <fieldset class="type-fieldset">
+            <legend>Ícono</legend>
+            <div
+              class="type-options"
+              role="radiogroup"
+              aria-label="Tipo de ítem"
+            >
+              <button
+                type="button"
+                class="type-option"
+                data-type="pill"
+                role="radio"
+                aria-checked="false"
+              >
+                <span class="type-icon-badge">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="3"
+                      y="9"
+                      width="18"
+                      height="6"
+                      rx="3"
+                      transform="rotate(-45 12 12)"
+                    />
+                    <line
+                      x1="12"
+                      y1="5.5"
+                      x2="12"
+                      y2="18.5"
+                      transform="rotate(-45 12 12)"
+                    />
+                  </svg>
+                </span>
+                <span>Pastilla</span>
+              </button>
+              <button
+                type="button"
+                class="type-option"
+                data-type="syrup"
+                role="radio"
+                aria-checked="false"
+              >
+                <span class="type-icon-badge">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M10 3h4v3.2c1.4.9 2.5 2.4 2.5 4.3v8a2.5 2.5 0 0 1-2.5 2.5h-4A2.5 2.5 0 0 1 7.5 18.5v-8c0-1.9 1.1-3.4 2.5-4.3V3z"
+                    />
+                    <line x1="9" y1="3" x2="15" y2="3" />
+                    <line x1="7.5" y1="13" x2="16.5" y2="13" />
+                  </svg>
+                </span>
+                <span>Jarabe</span>
+              </button>
+              <button
+                type="button"
+                class="type-option"
+                data-type="food"
+                role="radio"
+                aria-checked="false"
+              >
+                <span class="type-icon-badge">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <ellipse cx="12" cy="9" rx="8" ry="3" />
+                    <path d="M4 9v3c0 3.5 3.6 6 8 6s8-2.5 8-6V9" />
+                    <circle
+                      cx="9"
+                      cy="8.6"
+                      r="0.6"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="12"
+                      cy="7.8"
+                      r="0.6"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="15"
+                      cy="8.6"
+                      r="0.6"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                  </svg>
+                </span>
+                <span>Comida</span>
+              </button>
+            </div>
+            <input id="task-type" type="hidden" value="pill" />
+          </fieldset>
+
           <div class="form-actions">
-            <button id="save-task" type="submit">Save Task</button>
-            <button id="cancel-edit" type="button" class="secondary hidden">Cancel Edit</button>
+            <button id="save-task" type="submit">Guardar</button>
+            <button id="cancel-edit" type="button" class="secondary hidden">
+              Cancelar edición
+            </button>
           </div>
         </form>
 
         <ul id="manage-task-list" class="task-list"></ul>
-        <p id="manage-empty" class="empty-state">No tasks available.</p>
+        <p id="manage-empty" class="empty-state">
+          Todavía no hay nada cargado.
+        </p>
       </section>
 
       <p id="status-message" class="status-message" aria-live="polite"></p>
     </main>
 
     <script>
-      // Set your Firebase project config here before running the app.
+      // Pegá acá la config de tu proyecto de Firebase (ver README.md para los pasos).
       window.FIREBASE_CONFIG = window.FIREBASE_CONFIG || {
         apiKey: "",
         authDomain: "",
