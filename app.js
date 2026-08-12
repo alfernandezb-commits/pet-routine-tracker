@@ -184,7 +184,12 @@ function runApp(config) {
   let isResetting = false;
 
   function getTodayKey() {
-    return new Date().toISOString().split("T")[0];
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Argentina/Buenos_Aires",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
   }
 
   function renderTasks(tasks) {
